@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+typedef struct {
+int data[MAX];
+int top;
+} Stack;
+void initStack(Stack* s) {
+s->top = -1;
+}
+int isFull(Stack* s) {
+return s->top == MAX - 1;
+}
+int isEmpty(Stack* s) {
+return s->top == -1;
+}
+void push(Stack* s, int value) {
+if (!isFull(s)) {
+s->data[++(s->top)] = value;
+}
+}
+int pop(Stack* s) {
+if (!isEmpty(s)) {
+return s->data[(s->top)--];
+}
+return -1;
+}
+int peek(Stack* s) {
+if (!isEmpty(s)) {
+return s->data[s->top];
+}
+return -1;
+}
+int main() {
+Stack s;
+initStack(&s);
+push(&s, 10);
+push(&s, 20);
+push(&s, 30);
+printf("Top element is %d\n", peek(&s));
+printf("Popped element is %d\n", pop(&s));
+printf("Top element is %d\n", peek(&s));
+return 0;
+}
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Node {
+int data;
+struct Node* next;
+} Node;
+typedef struct {
+Node* top;
+} Stack;
+void initStack(Stack* s) {
+s->top = NULL;
+}
+int isEmpty(Stack* s) {
+return s->top == NULL;
+}
+void push(Stack* s, int value) {
+Node* newNode = (Node*)malloc(sizeof(Node));
+newNode->data = value;
+newNode->next = s->top;
+s->top = newNode;
+}
+int pop(Stack* s) {
+if (!isEmpty(s)) {
+Node* temp = s->top;
+int poppedValue = temp->data;
+s->top = s->top->next;
+free(temp);
+return poppedValue;
+}
+return -1;
+}
+int peek(Stack* s) {
+if (!isEmpty(s)) {
+return s->top->data;
+}
+return -1;
+}
+int main() {
+Stack s;
+initStack(&s);
+push(&s, 10);
+push(&s, 20);
+push(&s, 30);
+printf("Top element is %d\n", peek(&s));
+printf("Popped element is %d\n", pop(&s));
+printf("Top element is %d\n", peek(&s));
+return 0;
+}
