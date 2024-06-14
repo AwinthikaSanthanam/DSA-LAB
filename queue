@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 100
+struct Node {
+int data;
+struct Node* next;
+};
+struct QueueLinkedList {
+struct Node *front, *rear;
+};
+struct Node* newNode(int data) {
+struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+temp->data = data;
+temp->next = NULL;
+return temp;
+}
+struct QueueLinkedList* createQueueLinkedList() {
+struct QueueLinkedList* queue = (struct
+QueueLinkedList*)malloc(sizeof(struct QueueLinkedList));
+queue->front = queue->rear = NULL;
+return queue;
+}
+void enqueueLinkedList(struct QueueLinkedList* queue, int data) {
+struct Node* temp = newNode(data);
+if (queue->rear == NULL) {
+queue->front = queue->rear = temp;
+return;
+}
+queue->rear->next = temp;
+queue->rear = temp;
+}
+void dequeueLinkedList(struct QueueLinkedList* queue) {
+if (queue->front == NULL)
+return;
+struct Node* temp = queue->front;
+queue->front = queue->front->next;
+if (queue->front == NULL)
+queue->rear = NULL;
+free(temp);
+}
+void displayLinkedList(struct QueueLinkedList* queue) {
+struct Node* temp = queue->front;
+while (temp != NULL) {
+printf("%d ", temp->data);
+temp = temp->next;
+}
+printf("\n");
+}
+struct QueueArray {
+int front, rear, size;
+int* array;
+};
+struct QueueArray* createQueueArray(int size) {
+struct QueueArray* queue = (struct QueueArray*)malloc(sizeof(struct
+QueueArray));
+queue->front = queue->size = 0;
+queue->rear = size - 1;
+queue->array = (int*)malloc(queue->size * sizeof(int));
+return queue;
+}
+int isFull(struct QueueArray* queue) {
+return (queue->size == MAX_SIZE);
+}
+int isEmpty(struct QueueArray* queue) {
+return (queue->size == 0);
+}
+void enqueueArray(struct QueueArray* queue, int item) {
+if (isFull(queue))
+return;
+queue->rear = (queue->rear + 1) % MAX_SIZE;
+queue->array[queue->rear] = item;
+queue->size++;
+}
+int dequeueArray(struct QueueArray* queue) {
+if (isEmpty(queue))
+return -1;
+int item = queue->array[queue->front];
+queue->front = (queue->front + 1) % MAX_SIZE;
+queue->size--;
+return item;
+}
+void displayArray(struct QueueArray* queue) {
+int i;
+for (i = 0; i < queue->size; i++)
+printf("%d ", queue->array[i]);
+printf("\n");
+}
+int main() {
+struct QueueLinkedList* queueLinkedList = createQueueLinkedList();
+enqueueLinkedList(queueLinkedList, 10);
+enqueueLinkedList(queueLinkedList, 20);
+enqueueLinkedList(queueLinkedList, 30);
+displayLinkedList(queueLinkedList);
+dequeueLinkedList(queueLinkedList);
+displayLinkedList(queueLinkedList);
+struct QueueArray* queueArray = createQueueArray(100);
+enqueueArray(queueArray, 10);
+enqueueArray(queueArray, 20);
+enqueueArray(queueArray, 30);
+displayArray(queueArray);
+dequeueArray(queueArray);
+displayArray(queueArray);
+return 0;
